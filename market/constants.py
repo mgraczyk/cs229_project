@@ -1,0 +1,3 @@
+DEFAULT_DATABASE_PATH = 'market.db'
+DEFAULT_LABELS_DATABASE_PATH = 'labels.db'
+LABELS_CSV_PATH = 'labels.csv'

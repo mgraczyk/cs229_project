@@ -1,0 +1,13 @@
+# Vim undo history
+*.un~
+
+# Any temp file
+*~
+.*~
+
+# Temporary, hidden, and built files
+.*
+*.aux
+*.log
+*.pdf
+**/pub/*

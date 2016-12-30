@@ -1,0 +1,75 @@
+Our learning algorithm combines unsupervised feature selection with a supervised classifier. Our
+data set includes a large number of uncategorized documents and a small number of manually
+categorized documents. In both cases, each document's length is only a few dozen words. Because of
+the the relatively short length of the documents and the small size of the labeled training set, a
+supervised learning algorithm alone would have insufficient discriminative information to perform
+robust classification. Instead of using supervised learning in isolation, we extract more
+discriminative features from our unlabeled data set using a simple dimensionality reduction.  These
+high quality features are then used to train a supervised classifier which is much more likely to
+generalize well to new examples because the underlying structure of the feature space is more
+representative of the semantic structure of our entire corpus.
+
+\subsection{Unsupervised Feature Selection}
+\newcommand{\Xu}{X_{unlabeled}}
+\newcommand{\Xl}{X_{labeled}}
+\newcommand{\tX}{\tilde{X}}
+\newcommand{\tXl}{\tilde{X}_{labeled}}
+We perform feature selection using principal component analysis (PCA). In this case, the principal
+components are uncorrelated inferred meanings of tokens based on their usage patterns within the
+training data. This technique is known as Latent Semantic Indexing (LSA) because each document is
+indexed (described as vector) by a set of inferred statistical (latent) parameters which are chosen
+using their semantic relationships. This technique has been found to be an effective way to extract
+structure from unlabeled documents \cite{sun2004supervised}.
+
+Let $\Xu \in \RR^{N \times M}$ be the matrix of $N$ documents and $M$ tf-idf features for which
+there are no category labels. We compute the truncated singular value decomposition with rank $r$ to
+produce the transformation matrix $W_r \in \RR^{M \times r}$. That is, we find compute
+
+\begin{equation}
+\begin{aligned}
+\underset{W_r \in \RR^{M \times r}}{\argmin} \quad & \left| \Xu - \Xu \begin{bmatrix}Wr & 0 \\ 0 & 0\end{bmatrix} \right|_{fro}^2.
+\end{aligned}
+\end{equation}
+
+We use this transformation to select input features for our supervised classification algorithm by
+computing $\tXl = \Xl W_r$, where $\Xl$ is a matrix containing our labeled training data. 
+
+\subsection{Supervised Product Categorization}
+We categorize product listings using a soft-margin support vector machine (SVM) for each category.
+We discriminate categories using a one-versus-rest decision rule.
+
+Each support vector machine learns a decision boundary by maximizing the margin between the decision
+boundary and each training points.
+
+
+More formally, we will consider a single category $c$ and explain how the SVM determines the
+decision boundary $h_c$. For simplicity, we assume each label has value $y_i = 1$ if product $i$ is
+in category $c$ and $-1$ otherwise. Let $\mathcal{D} = \{(x_i, y_i), i = 1 \ldots N\}$ be the
+training data set with features $x_i \in \RR^r$ and labels $y_i \in \{-1, 1\}$.
+
+\begin{equation}
+\begin{aligned}
+  \underset{w,\xi,b}{\argmin} \quad & \frac{1}{2} ||w||^2 + C \sum_{i=1}^{N}{\xi_i} \\
+  \text{s. t.} \quad & y_i (w \cdot x_i - b) \ge 1 - \xi_i \\
+               \quad & \xi_i \ge 0
+\end{aligned}
+\end{equation}
+
+The optimization problem can be rewritten into its so-called "dual form". The dual form reveals a
+simpler optimization problem without explicit slack variables ($\xi$) and where many of the
+optimization parameters will be zero.
+
+\begin{equation}
+\begin{aligned}
+  \underset{\alpha \in \RR^N}{\argmax} \quad & \sum_{i=1}^{N}{\alpha_i} -
+      \frac{1}{2} \sum_{i,j}^{N}{\alpha_i\alpha_j y_i y_j x_i^\intercal x_j} \\
+      \text{s. t.} \quad & 0 \le \alpha_i \le C, i = 1, \ldots, N \\
+                   \quad & \sum_{i=1}^{N}{\alpha_i y_i} = 0
+\end{aligned}
+\end{equation}
+
+
+% Describe your learning algorithms. Make sure to include relevant mathematical notation. For
+% example, include the SVM optimization objective/formula. For each algorithm, give a short
+% description (1-2 paragraphs) of how it works. Again, we are looking for your understanding of how
+% these machine learning algorithms work.

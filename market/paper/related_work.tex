@@ -1,0 +1,17 @@
+There have been several attempts to analyze anonymous marketplaces\cite{gwern-silkroad}\cite{christin-silkroad}.
+In \cite{christin-silkroad}, the author crawled The Silk Road for eight months, analyzing product listings and the overall distribution of product listings.
+However, they relied on vendor supplied categorizations, which do not exist for all marketplaces.
+Additionally, some vendors purposely misclassify their product to appear higher in marketplace search results.
+Correcting for these problems requires manual labeling of at least a large fraction of the data (as has been used in analysis on other marketplaces, such as RAMP).
+
+Most of the machine learning techniques we used are well documented in the literature as effective building blocks for document classification systems.
+We extract word features from each listing using Term Frequency-Inverse Document Frequency (TF-IDF),
+which has proven effective in document categorization. \cite[p. 118]{manning}.
+Using SVD for dimensionality reduction is a common technique for reducing the size of the feature space for document classification\cite{sun2004supervised}.
+
+% You should find existing papers, group them into categories based on their approaches, and talk
+% about them: Discuss strengths and weaknesses. In your opinion, which approaches were clever/good?
+% What is the state-of-the-art? Do most people perform the task by hand? You should aim to have at
+% least 5 references in the related work. Include previous attempts by others at your problem,
+% previous technical methods, or previous learning algorithms. Google Scholar is very useful for this:
+% https://scholar.google.com/ (you can click “cite” and it generates MLA, APA, BibTeX, etc.)

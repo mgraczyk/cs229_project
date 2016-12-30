@@ -1,0 +1,42 @@
+We used an anonymous marketplace product listing dataset created by the researcher known as
+Gwern\cite{gwern-darknet}.
+This dataset was created by crawling several marketplaces daily, from June 6th, 2014 to July 7th, 2015.
+For each product listing, we extracted the posting text, including name and description.
+The resulting dataset was then cleaned to remove parse errors and duplicate listings.
+We then tokenized the cleaned listings by extracting all words and numbers seperated by spaces or
+symbols.
+The final dataset had about 84,000 unique product listings and was used as input to feature extraction.
+
+\begin{table}[!ht]
+    \begin{center}
+        \begin{tabular}{| l | p{0.8\linewidth} |}
+        \hline
+        Crawl Date & 2014-06-28 \\
+        \hline
+        Category & MDMA \\
+        \hline
+        Title & 28 Grams of Interways Crystal Clear Molly \\
+        \hline
+        Price & 1.37853692 BTC \\
+        \hline
+        Description & This is 28 grams of Interways crystal clear molly.
+        It will be both rocky and sandy as thats how I received it.
+        I am pre packaging these up accordingly and only cr... \\
+        \hline
+        \end{tabular}
+    \end{center}
+    \caption{Example product listing on Agora}
+\end{table}
+
+To convert the text to features, we used Term Frequecy-Inverse Document Frequence (TF-IDF).
+TF-IDF converts each token in the listing to a token weight based on how important that token is to the listing, normalized by the number of times the token appears in the whole corpus.
+This normalization helps to reduce the impact of common token in the corpus.
+Finally, each listing is then converted to a vector of token weights, similar to word2vec.
+
+$$ {tf}_{t,d} = \text{number of times token } t \text{ appears in document } d $$
+$$ {idf}_t = \log \frac{\text{total number of documents}}{\text{number of documents the token } t \text{ appears in}} $$
+$$ w_{t,d} = (1 + \log ({tf}_{t,d})) * (1 + {idf}_t) $$
+
+Additionally, we manually labeled about 500 product listings to train our classifier as well as to use for cross-validation.
+We classified each product listing into one of twelve categories.
+These product categories were derived from the product categories on both Agora\cite{agora} (one of the largest anonymous markets) and /r/darknetmarkets (a popular forum for advertising and discussing drugs).
